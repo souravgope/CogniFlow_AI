@@ -1,5 +1,5 @@
 export async function generateDiagram(prompt, interactive = true) {
-  const response = await fetch("/generate-diagram", {
+  const response = await fetch("${API_URL}/generate-diagram", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

@@ -1,5 +1,7 @@
+import { API_URL } from "../config";
+
 export async function signupUser(name, email, password) {
-  const response = await fetch("/api/auth/signup", {
+  const response = await fetch(`${API_URL}/api/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -15,7 +17,7 @@ export async function signupUser(name, email, password) {
 }
 
 export async function loginUser(email, password) {
-  const response = await fetch("/api/auth/login", {
+  const response = await fetch(`${API_URL}/api/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -31,7 +33,7 @@ export async function loginUser(email, password) {
 }
 
 export async function googleLoginUser(token) {
-  const response = await fetch("/api/auth/google", {
+  const response = await fetch(`${API_URL}/api/auth/google`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -47,7 +49,7 @@ export async function googleLoginUser(token) {
 }
 
 export async function forgotPasswordRequest(email) {
-  const response = await fetch("/api/auth/forgot-password", {
+  const response = await fetch(`${API_URL}/api/auth/forgot-password`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -63,7 +65,7 @@ export async function forgotPasswordRequest(email) {
 }
 
 export async function resetPasswordRequest(token, password) {
-  const response = await fetch(`/api/auth/reset-password/${token}`, {
+  const response = await fetch(`${API_URL}/api/auth/reset-password/${token}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -82,7 +84,7 @@ export async function getCurrentUser() {
   const token = localStorage.getItem("token");
   if (!token) return null;
 
-  const response = await fetch("/api/auth/me", {
+  const response = await fetch(`${API_URL}/api/auth/me`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${token}`

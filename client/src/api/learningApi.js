@@ -1,5 +1,6 @@
+import { API_URL } from "../config";
 export async function generateLearningPath(formData) {
-  const response = await fetch("/api/generate-learning-path", {
+  const response = await fetch(`${API_URL}/api/generate-learning-path`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -17,7 +18,7 @@ export async function generateLearningPath(formData) {
 }
 
 export async function generateQuiz(targetRole, skillLevel) {
-  const response = await fetch("/api/generate-quiz", {
+  const response = await fetch(`${API_URL}/api/generate-quiz`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

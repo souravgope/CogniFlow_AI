@@ -1,5 +1,6 @@
+import { API_URL } from "../config";
 export async function analyzeMistake(formData) {
-  const response = await fetch("/api/analyze-mistake", {
+  const response = await fetch(`${API_URL}/api/analyze-mistake`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData)

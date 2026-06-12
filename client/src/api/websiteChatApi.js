@@ -1,5 +1,6 @@
+import { API_URL } from "../config";
 export async function askWebsiteChat(formData) {
-  const response = await fetch("/api/website-chat", {
+  const response = await fetch(`${API_URL}/api/website-chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData)

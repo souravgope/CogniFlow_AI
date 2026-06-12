@@ -1,5 +1,6 @@
+import { API_URL } from "../config";
 export async function generateExplanation(formData) {
-  const response = await fetch("/api/generate-explanation", {
+  const response = await fetch(`${API_URL}/api/generate-explanation`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData)

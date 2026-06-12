@@ -7,7 +7,7 @@ export async function generateDocs({ projectName, description, files }) {
     formData.append("files", file);
   }
 
-  const response = await fetch("/generate-docs", {
+  const response = await fetch("${API_URL}/generate-docs", {
     method: "POST",
     body: formData
   });
