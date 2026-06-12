@@ -19,7 +19,7 @@ const port = process.env.PORT || 5001;
 const app = createApp();
 
 const server = app.listen(port, () => {
-  console.log(`AI whiteboard server listening on http://localhost:${port}`);
+  console.log(`AI whiteboard server listening on port ${port}`);
 });
 
 server.on("error", (err) => {
