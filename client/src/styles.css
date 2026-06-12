@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+@layer components {
+  .primary-button {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-700 dark:bg-mint dark:text-zinc-950 dark:hover:bg-teal-300;
+  }
+
+  .secondary-button {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-semibold transition hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800;
+  }
+
+  .icon-button {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-300 bg-white text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800;
+  }
+
+  .chip {
+    @apply rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-700 transition hover:border-mint hover:text-ink dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:text-white;
+  }
+
+  .toolbar {
+    @apply flex flex-col justify-between gap-3 rounded-lg border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:flex-row sm:items-center;
+  }
+
+  .segmented {
+    @apply inline-flex rounded-lg border border-zinc-300 bg-zinc-100 p-1 dark:border-zinc-700 dark:bg-zinc-950;
+  }
+
+  .mode-button {
+    @apply inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-zinc-600 transition dark:text-zinc-400;
+  }
+
+  .mode-button-active {
+    @apply bg-white text-ink shadow-sm dark:bg-zinc-800 dark:text-white;
+  }
+
+  .workspace {
+    @apply min-h-[560px] overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-panel dark:border-zinc-800 dark:bg-zinc-900;
+  }
+
+  .diagram-stage {
+    @apply min-h-[560px] bg-[linear-gradient(#e5e7eb_1px,transparent_1px),linear-gradient(90deg,#e5e7eb_1px,transparent_1px)] bg-[size:28px_28px] p-4 dark:bg-[linear-gradient(#27272a_1px,transparent_1px),linear-gradient(90deg,#27272a_1px,transparent_1px)];
+  }
+
+  .diagram-scroll {
+    @apply h-[520px] overflow-auto rounded-lg bg-white/90 p-5 dark:bg-zinc-950/80;
+  }
+
+  .diagram-output {
+    @apply flex min-h-full min-w-max items-center justify-center;
+  }
+
+  .diagram-output svg {
+    max-width: none;
+  }
+
+  .whiteboard-shell {
+    @apply rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900;
+  }
+
+  .whiteboard-canvas {
+    @apply h-[560px] overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800;
+  }
+
+  .side-panel {
+    @apply rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900;
+  }
+
+  .panel-title {
+    @apply mb-3 text-base font-semibold;
+  }
+
+  .saved-item {
+    @apply grid gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-left transition hover:border-mint hover:bg-white dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900;
+  }
+
+  .notice {
+    @apply rounded-lg border border-teal-200 bg-teal-50 px-3 py-2 text-sm text-teal-900 dark:border-teal-500/30 dark:bg-teal-500/10 dark:text-teal-100;
+  }
+
+  .notice-error {
+    @apply rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-100;
+  }
+}
+
+/* Premium Animations & Interactions */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.96) translateY(4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulseBorder {
+  0%, 100% { border-color: rgba(20, 184, 166, 0.4); box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.2); }
+  50% { border-color: rgba(20, 184, 166, 0.8); box-shadow: 0 0 8px 2px rgba(20, 184, 166, 0.4); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.pulse-glowing-border {
+  animation: pulseBorder 2s infinite ease-in-out;
+}
+
+/* Custom Scrollbar for Code Block and Sidebar Panel */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+@keyframes soundWaveBar {
+  0% { transform: scaleY(0.2); }
+  100% { transform: scaleY(1.0); }
+}

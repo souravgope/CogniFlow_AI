@@ -1,0 +1,63 @@
+# ==========================
+# Dependencies
+# ==========================
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# ==========================
+# Environment Variables
+# ==========================
+.env
+server/.env
+client/.env
+
+# ==========================
+# Build Files
+# ==========================
+dist/
+client/dist/
+build/
+
+# ==========================
+# Python Cache
+# ==========================
+__pycache__/
+*.pyc
+
+# ==========================
+# Log & Stack Dump Files
+# ==========================
+*.log
+*.stackdump
+
+# ==========================
+# VS Code
+# ==========================
+.vscode/
+
+# ==========================
+# Personal Scripts
+# ==========================
+kill-port.bat
+generate_ppt.py
+md_to_docx.py
+
+# ==========================
+# Word Reports
+# ==========================
+Comprehensive_Project_Report.docx
+FINAL_PROJECT_REPORT.docx
+FINAL_PROJECT_REPORT_V2.docx
+FINAL_PROJECT_REPORT_V3.docx
+FINAL_PROJECT_REPORT_V4.docx
+FINAL_PROJECT_REPORT_V5.docx
+FINAL_PROJECT_REPORT_V6.docx
+FINAL_PROJECT_REPORT_V7.docx
+
+# ==========================
+# PowerPoint Files
+# ==========================
+Project_Presentation.pptx
+Project_Presentation_Styled.pptx
+Project_Presentation_Styled_V2.pptx
