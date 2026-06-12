@@ -11,6 +11,7 @@ server/node_modules/
 .env
 server/.env
 client/.env
+server/.env.example
 
 # ==========================
 # Build Files
