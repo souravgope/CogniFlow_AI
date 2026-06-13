@@ -4,7 +4,7 @@
  * Usage: node test-learning-endpoint.js
  */
 
-const BASE_URL = "http://localhost:5001";
+const BASE_URL = "https://cogniflow-ai-w56q.onrender.com";
 
 async function testEndpoint() {
   console.log("🧪 Testing Learning Path Endpoint...\n");
@@ -20,7 +20,7 @@ async function testEndpoint() {
       process.exit(1);
     }
   } catch (error) {
-    console.error("❌ Cannot connect to backend. Is it running on port 5001?\n");
+    console.error("❌ Cannot connect to backend.\n");
     process.exit(1);
   }
 

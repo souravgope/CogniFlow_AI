@@ -2,7 +2,7 @@ import mermaid from "mermaid";
 import { useEffect, useId, useRef, useState } from "react";
 
 export default function DiagramPreview({
-  code,
+  code = "",
   isDark,
   nodes = [],
   onNodeSelect = () => {},
@@ -142,8 +142,12 @@ export default function DiagramPreview({
       }
     }
 
-    if (code.trim()) {
-      renderDiagram();
+    // if (code.trim()) {
+    //   renderDiagram();
+    // }
+
+    if ((code || "").trim()) {
+        renderDiagram();
     }
 
     return () => {
