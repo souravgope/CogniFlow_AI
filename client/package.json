@@ -12,6 +12,7 @@
     "@excalidraw/excalidraw": "^0.17.6",
     "@react-oauth/google": "^0.13.5",
     "@vitejs/plugin-react": "^4.3.4",
+    "ai-whiteboard": "file:..",
     "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.39.0",
     "jspdf": "^4.2.1",
