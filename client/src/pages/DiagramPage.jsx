@@ -214,7 +214,10 @@ export default function DiagramPage() {
     document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
 
-  const canExport = useMemo(() => code.trim().length > 0, [code]);
+ const canExport = useMemo(
+  () => (code || "").trim().length > 0,
+  [code]
+);
 
   // Synchronize dynamic details when a node is clicked/selected
   const handleNodeSelect = (node) => {
@@ -242,7 +245,7 @@ export default function DiagramPage() {
     try {
       const result = await generateDiagram(targetPrompt, true);
 
-      setCode(result.code);
+      setCode(result?.code || "");
       setDiagramType(result.diagramType);
 
       if (result.nodes) setNodes(result.nodes);
@@ -266,7 +269,7 @@ export default function DiagramPage() {
 
   // Handle Generate Action
   const handleGenerate = () => {
-    if (prompt.trim()) {
+    if (prompt?.trim()) {
       runInteractiveGeneration(prompt);
     }
   };
@@ -311,7 +314,7 @@ export default function DiagramPage() {
   // Load Diagram
   function loadDiagram(item) {
     setPrompt(item.prompt);
-    setCode(item.code);
+    setCode(item?.code || "");
     setDiagramType(item.diagramType);
     setView("visual");
     setStatus("Saved diagram loaded. Synchronizing interactive assets...");
@@ -357,7 +360,7 @@ export default function DiagramPage() {
 
   // Context-aware AI chat handler (Requirement 4)
   const handleSendChatMessage = async () => {
-    if (!chatMessage.trim()) return;
+    if (!chatMessage?.trim()) return;
 
     const userText = chatMessage;
     setChatMessage("");
@@ -400,7 +403,10 @@ ${userText}
     }
 
     // Clean pause blocks from video script or notes
-    const cleanedText = textToSpeak.replace(/\[pause\]/gi, "").trim();
+    // const cleanedText = textToSpeak.replace(/\[pause\]/gi, "").trim();
+    const cleanedText = (textToSpeak || "")
+       .replace(/\[pause\]/gi, "")
+       .trim();
 
     const utterance = new SpeechSynthesisUtterance(cleanedText);
 
@@ -501,7 +507,7 @@ ${userText}
                 className="primary-button bg-gradient-to-r from-teal-600 to-emerald-500 hover:from-teal-500 hover:to-emerald-400 text-white border-0 shadow-lg shadow-teal-500/15"
                 type="button"
                 onClick={handleGenerate}
-                disabled={isGenerating || !prompt.trim()}
+                disabled={isGenerating || !prompt?.trim()}
               >
                 <Sparkles size={16} className={isGenerating ? "animate-spin" : ""} />
                 {isGenerating ? "Generating Workspace..." : "Generate Interactive Layout"}
