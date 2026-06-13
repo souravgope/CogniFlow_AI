@@ -1,5 +1,8 @@
+import { API_URL } from "../config";
+
 export async function generateDiagram(prompt, interactive = true) {
-  const response = await fetch("${API_URL}/generate-diagram", {
+  const baseUrl = API_URL?.replace(/\/$/, "") || "";
+  const response = await fetch(`${baseUrl}/generate-diagram`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -17,7 +20,8 @@ export async function generateDiagram(prompt, interactive = true) {
 }
 
 export async function syncDiagramMetadata(code, diagramType) {
-  const response = await fetch("/sync-diagram-metadata", {
+  const baseUrl = API_URL?.replace(/\/$/, "") || "";
+  const response = await fetch(`${baseUrl}/sync-diagram-metadata`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
