@@ -206,18 +206,18 @@ function getClientOrigin() {
 async function sendPasswordResetEmail(userEmail, resetUrl) {
   const emailHost = process.env.EMAIL_HOST || "smtp.gmail.com";
   const emailPort = parseInt(process.env.EMAIL_PORT, 10) || 587;
-  const mailConfig = {
-    host: emailHost,
-    port: emailPort,
-    secure: emailPort === 465,
-    auth: {
-      user: process.env.EMAIL_USER || "",
-      pass: process.env.EMAIL_PASS || ""
-    },
-    tls: {
-      rejectUnauthorized: false
-    }
-  };
+  // const mailConfig = {
+  //   host: emailHost,
+  //   port: emailPort,
+  //   secure: emailPort === 465,
+  //   auth: {
+  //     user: process.env.EMAIL_USER || "",
+  //     pass: process.env.EMAIL_PASS || ""
+  //   },
+  //   tls: {
+  //     rejectUnauthorized: false
+  //   }
+  // };
 
   if (emailHost === "smtp.gmail.com" || emailHost === "smtp.googlemail.com") {
     mailConfig.service = "gmail";
@@ -231,7 +231,7 @@ async function sendPasswordResetEmail(userEmail, resetUrl) {
   }
 
   try {
-    const transporter = nodemailer.createTransport(mailConfig);
+    // const transporter = nodemailer.createTransport(mailConfig);
     const mailOptions = {
       from: `"AI Workspace" <${process.env.EMAIL_USER}>`,
       to: userEmail,
