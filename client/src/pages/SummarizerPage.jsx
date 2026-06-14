@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { generateExplanation } from "../api/explanationApi";
+import { API_URL } from "../config";
 import DiagramPreview from "../components/DiagramPreview";
 
 function mermaidLabel(value, fallback = "Item") {
@@ -438,8 +439,12 @@ export default function SummarizerPage() {
     if (!query) { setTopicImage(null); setImageStatus("idle"); return; }
     setTopicImage(null);
     setImageStatus("loading");
+    const searchQuery = fallbackImageSearch(query) || query;
+    const baseUrl = API_URL || "";
+    const url = `${baseUrl}/api/image-search?q=${encodeURIComponent(searchQuery)}`;
+
     try {
-      const resp = await fetch(`/api/image-search?q=${encodeURIComponent(query)}`);
+      const resp = await fetch(url);
       if (resp.ok) {
         const data = await resp.json();
         if (data?.url) {
@@ -453,7 +458,9 @@ export default function SummarizerPage() {
           return;
         }
       }
-    } catch { /* network error */ }
+    } catch {
+      /* network error */
+    }
     setImageStatus("empty");
   }
 

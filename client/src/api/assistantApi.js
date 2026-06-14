@@ -1,5 +1,7 @@
+import { API_URL } from "../config";
+
 export async function askAssistant(formData) {
-  const response = await fetch("/api/assistant", {
+  const response = await fetch(`${API_URL || ""}/api/assistant`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData)
