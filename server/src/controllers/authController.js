@@ -204,49 +204,38 @@ function getClientOrigin() {
 }
 
 async function sendPasswordResetEmail(userEmail, resetUrl) {
-  const emailHost = process.env.EMAIL_HOST || "smtp.gmail.com";
-  const emailPort = parseInt(process.env.EMAIL_PORT, 10) || 587;
-  // const mailConfig = {
-  //   host: emailHost,
-  //   port: emailPort,
-  //   secure: emailPort === 465,
-  //   auth: {
-  //     user: process.env.EMAIL_USER || "",
-  //     pass: process.env.EMAIL_PASS || ""
-  //   },
-  //   tls: {
-  //     rejectUnauthorized: false
-  //   }
-  // };
-
-  if (emailHost === "smtp.gmail.com" || emailHost === "smtp.googlemail.com") {
-    mailConfig.service = "gmail";
-  }
 
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.log("📡 SMTP credentials are not configured. Password reset mail is being simulated in server logs.");
-    console.log("✉️ Mail To:", userEmail);
-    console.log("🔗 Reset Link:", resetUrl);
+    console.log("SMTP not configured");
     return;
   }
 
   try {
-    // const transporter = nodemailer.createTransport(mailConfig);
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
     const mailOptions = {
       from: `"AI Workspace" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: "AI Workspace - Password Reset Link",
-      text: `You requested a password reset. Please click this link to reset it (expires in 10 mins):\n\n${resetUrl}\n\nIf you did not request this, ignore this email.`
+      text: `You requested a password reset.\n\n${resetUrl}`
     };
 
     await transporter.verify();
     await transporter.sendMail(mailOptions);
-    console.log("📡 Password reset email sent successfully to", userEmail);
+
+    console.log("📡 Password reset email sent successfully");
   } catch (err) {
     console.error("❌ Real SMTP Mail error:", err);
   }
 }
-
 // @desc    Forgot Password Request
 // @route   POST /api/auth/forgot-password
 // @access  Public
