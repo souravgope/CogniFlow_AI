@@ -1,3 +1,5 @@
+import { API_URL } from "../config";
+
 export async function generateDocs({ projectName, description, files }) {
   const formData = new FormData();
   formData.append("projectName", projectName);
@@ -7,7 +9,8 @@ export async function generateDocs({ projectName, description, files }) {
     formData.append("files", file);
   }
 
-  const response = await fetch("${API_URL}/generate-docs", {
+  const baseUrl = API_URL?.replace(/\/$/, "") || "";
+  const response = await fetch(`${baseUrl}/generate-docs`, {
     method: "POST",
     body: formData
   });

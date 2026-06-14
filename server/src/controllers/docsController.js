@@ -1,3 +1,4 @@
+import { PDFParse } from "pdf-parse";
 import { generateDocumentation } from "../utils/docsAiClient.js";
 import { buildFallbackDocs } from "../utils/docsFallback.js";
 
@@ -22,7 +23,8 @@ const textExtensions = new Set([
   ".txt",
   ".xml",
   ".yaml",
-  ".yml"
+  ".yml",
+  ".pdf"
 ]);
 
 function getExtension(filename) {
@@ -34,7 +36,7 @@ function isTextFile(file) {
   return file.mimetype.startsWith("text/") || textExtensions.has(getExtension(file.originalname));
 }
 
-function buildProjectContext({ projectName, description, files }) {
+async function buildProjectContext({ projectName, description, files }) {
   const textFiles = [];
   const imageFiles = [];
 
@@ -46,6 +48,23 @@ function buildProjectContext({ projectName, description, files }) {
         size: file.size,
         base64: file.buffer.toString("base64")
       });
+      continue;
+    }
+
+    const extension = getExtension(file.originalname);
+    if (file.mimetype === "application/pdf" || extension === ".pdf") {
+      try {
+        const parser = new PDFParse({ data: file.buffer });
+        const data = await parser.getText();
+        textFiles.push({
+          filename: file.originalname,
+          mimetype: file.mimetype,
+          size: file.size,
+          content: String(data.text || "").slice(0, 25000)
+        });
+      } catch (error) {
+        console.warn(`Unable to parse PDF ${file.originalname}:`, error.message || error);
+      }
       continue;
     }
 
@@ -76,7 +95,7 @@ export async function generateDocs(req, res, next) {
       return res.status(400).json({ message: "Project name is required." });
     }
 
-    const context = buildProjectContext({
+    const context = await buildProjectContext({
       projectName,
       description,
       files: req.files || []

@@ -142,12 +142,21 @@ export default function DocsPage() {
   }, [docs, activeTab]);
 
   const hasOutput = useMemo(() => {
-    // If we have readme text, technicalDoc text, or custom JSON keys with data, return true
-    return (
-      (docs.readme && docs.readme.trim().length > 0) ||
-      (docs.features?.implemented?.length > 0) ||
-      (docs.vivaQuestions?.length > 0)
-    );
+    const textSections = [
+      docs.readme,
+      docs.technicalDoc,
+      docs.architecture,
+      docs.apiDocs,
+      docs.pptSummary
+    ];
+
+    const hasText = textSections.some((section) => typeof section === "string" && section.trim().length > 0);
+    const hasFeatures = (docs.features?.implemented?.length || 0) > 0 || (docs.features?.missing?.length || 0) > 0;
+    const hasViva = (docs.vivaQuestions?.length || 0) > 0;
+    const hasSuggestions = (docs.suggestions?.bugs?.length || 0) > 0 || (docs.suggestions?.improvements?.length || 0) > 0;
+    const hasApiFlow = (docs.apiFlow?.nodes?.length || 0) > 0 || (docs.apiFlow?.edges?.length || 0) > 0;
+
+    return hasText || hasFeatures || hasViva || hasSuggestions || hasApiFlow;
   }, [docs]);
 
   // Reset indices and selection when data updates
