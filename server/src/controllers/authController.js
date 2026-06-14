@@ -195,6 +195,14 @@ export const logout = async (req, res) => {
   res.json({ message: "Session terminated successfully." });
 };
 
+function getClientOrigin() {
+  const raw = process.env.CLIENT_ORIGIN || "http://localhost:5173";
+  return String(raw)
+    .split(",")
+    .map((origin) => origin.trim())
+    .find((origin) => origin.startsWith("http")) || "http://localhost:5173";
+}
+
 async function sendPasswordResetEmail(userEmail, resetUrl) {
   const emailHost = process.env.EMAIL_HOST || "smtp.gmail.com";
   const emailPort = parseInt(process.env.EMAIL_PORT, 10) || 587;
@@ -210,6 +218,10 @@ async function sendPasswordResetEmail(userEmail, resetUrl) {
       rejectUnauthorized: false
     }
   };
+
+  if (emailHost === "smtp.gmail.com" || emailHost === "smtp.googlemail.com") {
+    mailConfig.service = "gmail";
+  }
 
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     console.log("📡 SMTP credentials are not configured. Password reset mail is being simulated in server logs.");
@@ -227,6 +239,7 @@ async function sendPasswordResetEmail(userEmail, resetUrl) {
       text: `You requested a password reset. Please click this link to reset it (expires in 10 mins):\n\n${resetUrl}\n\nIf you did not request this, ignore this email.`
     };
 
+    await transporter.verify();
     await transporter.sendMail(mailOptions);
     console.log("📡 Password reset email sent successfully to", userEmail);
   } catch (err) {
@@ -255,7 +268,7 @@ export const forgotPassword = async (req, res) => {
 
     await user.save();
 
-    const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
+    const clientOrigin = getClientOrigin();
     const resetUrl = `${clientOrigin}/reset-password/${resetToken}`;
 
     res.json({ message: "A secure password reset link has been successfully dispatched to your email address." });
