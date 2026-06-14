@@ -195,6 +195,45 @@ export const logout = async (req, res) => {
   res.json({ message: "Session terminated successfully." });
 };
 
+async function sendPasswordResetEmail(userEmail, resetUrl) {
+  const emailHost = process.env.EMAIL_HOST || "smtp.gmail.com";
+  const emailPort = parseInt(process.env.EMAIL_PORT, 10) || 587;
+  const mailConfig = {
+    host: emailHost,
+    port: emailPort,
+    secure: emailPort === 465,
+    auth: {
+      user: process.env.EMAIL_USER || "",
+      pass: process.env.EMAIL_PASS || ""
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  };
+
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.log("📡 SMTP credentials are not configured. Password reset mail is being simulated in server logs.");
+    console.log("✉️ Mail To:", userEmail);
+    console.log("🔗 Reset Link:", resetUrl);
+    return;
+  }
+
+  try {
+    const transporter = nodemailer.createTransport(mailConfig);
+    const mailOptions = {
+      from: `"AI Workspace" <${process.env.EMAIL_USER}>`,
+      to: userEmail,
+      subject: "AI Workspace - Password Reset Link",
+      text: `You requested a password reset. Please click this link to reset it (expires in 10 mins):\n\n${resetUrl}\n\nIf you did not request this, ignore this email.`
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("📡 Password reset email sent successfully to", userEmail);
+  } catch (err) {
+    console.error("❌ Real SMTP Mail error:", err);
+  }
+}
+
 // @desc    Forgot Password Request
 // @route   POST /api/auth/forgot-password
 // @access  Public
@@ -219,59 +258,10 @@ export const forgotPassword = async (req, res) => {
     const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
     const resetUrl = `${clientOrigin}/reset-password/${resetToken}`;
 
-    // Mail configurations
-    const emailHost = process.env.EMAIL_HOST || "smtp.gmail.com";
-    const emailPort = parseInt(process.env.EMAIL_PORT) || 587;
-    const mailConfig = {
-      host: emailHost,
-      port: emailPort,
-      secure: emailPort === 465,
-      auth: {
-        user: process.env.EMAIL_USER || "",
-        pass: process.env.EMAIL_PASS || ""
-      },
-      tls: {
-        rejectUnauthorized: false
-      }
-    };
-
-    let mailSent = false;
-    let errorLog = "";
-
-    // Trigger email send if credentials are provided
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      try {
-        const transporter = nodemailer.createTransport(mailConfig);
-        const mailOptions = {
-          from: `"AI Workspace" <${process.env.EMAIL_USER}>`,
-          to: user.email,
-          subject: "AI Workspace - Password Reset Link",
-          text: `You requested a password reset. Please click this link to reset it (expires in 10 mins):\n\n${resetUrl}\n\nIf you did not request this, ignore this email.`
-        };
-        await transporter.sendMail(mailOptions);
-        mailSent = true;
-      } catch (err) {
-        errorLog = err.message;
-        console.error("❌ Real SMTP Mail error:", err);
-      }
-    }
-
-    // Output simulated email to the console! Excellent preview feature.
-    console.log(" \n");
-    console.log("------------------- MOCK MAIL GATEWAY -------------------");
-    console.log(`✉️ Mail To: ${user.email}`);
-    console.log(`🔑 Subject: AI Workspace Password Reset Request`);
-    console.log(`🔗 Link: ${resetUrl}`);
-    console.log(`⏳ Expiration: 10 minutes`);
-    if (mailSent) {
-      console.log("📡 Status: Real SMTP Mail sent successfully.");
-    } else {
-      console.log(`📡 Status: SIMULATOR ACTIVE (SMTP config not set or errored: ${errorLog})`);
-    }
-    console.log("---------------------------------------------------------");
-    console.log(" \n");
-
     res.json({ message: "A secure password reset link has been successfully dispatched to your email address." });
+
+    // Send the email in the background so the API returns quickly.
+    void sendPasswordResetEmail(user.email, resetUrl);
   } catch (error) {
     console.error("❌ Forgot password error:", error);
     res.status(500).json({ message: error.message || "Error generating reset token request." });
